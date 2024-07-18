@@ -15,9 +15,9 @@ const UploadCareButtonNoSSR = dynamic(() => import('./uploadCare'), {
 
 
 interface profilePictureProps {
-    userImage: string | null
-    onDelete?: any
-    onUpload: any
+  userImage: string | null;
+  onDelete?: any;
+  onUpload?: any;
 }
 
 const ProfilPicture: FC<profilePictureProps> = ({ userImage, onDelete, onUpload }: profilePictureProps) => {
@@ -26,6 +26,8 @@ const ProfilPicture: FC<profilePictureProps> = ({ userImage, onDelete, onUpload 
 
   const onRemoveProfileImage = async () => {
     const response = await onDelete()
+    console.log(response)
+    console.log("first")
     if (response) {
       router.refresh()
     }
@@ -38,7 +40,7 @@ const ProfilPicture: FC<profilePictureProps> = ({ userImage, onDelete, onUpload 
       <div className="flex h-[40vh] flex-col items-center justify-center">
       {userImage ? (
           <>
-            <div className="relative h-full w-2/12">
+            <div className="relative h-full w-2/12 rounded-full overflow-hidden">
               <Image
                 src={userImage}
                 alt="User_Image"

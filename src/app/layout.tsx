@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import ModelProvider from "@/providers/modal-provider";
 
 const inter = DM_Sans({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+    >
       <html lang="en">
         <body className={inter.className}>
           <ThemeProvider
@@ -26,7 +29,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <ModelProvider>{children}</ModelProvider>
           </ThemeProvider>
         </body>
       </html>

@@ -19,10 +19,11 @@ import { z } from 'zod'
 import { EditUserProfileSchema } from '@/lib/types'
 
 interface profileFormProps {
-  
+  info : any
+  onUpdate?:any
 }
 
-const ProfileForm: FC<profileFormProps> = ({}) => {
+const ProfileForm: FC<profileFormProps> = ({info,onUpdate}) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -30,14 +31,28 @@ const ProfileForm: FC<profileFormProps> = ({}) => {
        mode: 'onChange',
       //  resolver : zodResolver(EditUserProfileSchema),
        defaultValues : {
-        name : '',
-        email : ''
+        name : info.name,
+        email : info.email
        }
     })
+
+    const handleSubmit = async (
+      values: z.infer<typeof EditUserProfileSchema>
+    ) => {
+      setIsLoading(true)
+      await onUpdate(values.name)
+      setIsLoading(false)
+    }
+
+    useEffect(() => {
+      form.reset({ name: info.name, email: info.email })
+    }, [info])
+
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-6"
+        onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
           disabled={isLoading}
