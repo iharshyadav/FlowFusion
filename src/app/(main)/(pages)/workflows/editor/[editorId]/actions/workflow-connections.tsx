@@ -1,0 +1,39 @@
+'use server'
+
+import { Workflows } from '@/lib/database/schema'
+
+export const onCreateNodesEdges = async (
+  flowId: string,
+  nodes: string,
+  edges: string,
+  flowPath: string
+) => {
+  const result = await Workflows.updateOne(
+    { _id: flowId },
+    {
+      $set: {
+        nodes,
+        edges,
+        flowPath,
+      },
+    }
+  )
+
+  if (result.modifiedCount > 0) return { message: 'flow saved' }
+  else return { message: 'no changes made' }
+}
+
+export const onFlowPublish = async (workflowId: string, state: boolean) => {
+
+  const result = await Workflows.updateOne(
+    { _id: workflowId },
+    {
+      $set: {
+        published: state,
+      },
+    }
+  )
+
+  if (result.modifiedCount > 0) return { message: 'workflow published' }
+  else return { message: 'workflow unpublished' }
+}

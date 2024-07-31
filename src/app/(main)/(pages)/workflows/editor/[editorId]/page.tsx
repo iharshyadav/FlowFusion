@@ -1,6 +1,7 @@
 import { ConnectionsProvider } from '@/providers/connections-provider'
 import EditorProvider from '@/providers/editor-provider'
 import { FC } from 'react'
+import EditorCanvas from './components/editor-canvas'
 
 interface pageProps {
   
@@ -11,8 +12,7 @@ const Page: FC<pageProps> = ({}) => {
     <div className="h-full">
       <EditorProvider>
         <ConnectionsProvider>
-          {/* <EditorCanvas /> */}
-         do later remember once i will come back........
+          <EditorCanvas />
         </ConnectionsProvider>
       </EditorProvider>
     </div>
