@@ -9,7 +9,7 @@ interface pageProps {
 
 const Page: FC<pageProps> = ({}) => {
   return (
-    <div className="h-full">
+    <div className="h-screen">
       <EditorProvider>
         <ConnectionsProvider>
           <EditorCanvas />

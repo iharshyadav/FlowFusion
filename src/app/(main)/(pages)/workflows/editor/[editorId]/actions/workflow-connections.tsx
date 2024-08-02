@@ -1,6 +1,7 @@
 'use server'
 
 import { Workflows } from '@/lib/database/schema'
+import { auth } from '@clerk/nextjs/server'
 
 export const onCreateNodesEdges = async (
   flowId: string,
@@ -36,4 +37,17 @@ export const onFlowPublish = async (workflowId: string, state: boolean) => {
 
   if (result.modifiedCount > 0) return { message: 'workflow published' }
   else return { message: 'workflow unpublished' }
+}
+
+export const getGoogleListener = async () => {
+  const { userId } = auth()
+
+  if (userId) {
+    const listener = await Workflows.findOne(
+      { clerkId: userId },
+      'googleResourceId' // Selects only the googleResourceId field
+    );
+
+    if (listener) return listener
+  }
 }

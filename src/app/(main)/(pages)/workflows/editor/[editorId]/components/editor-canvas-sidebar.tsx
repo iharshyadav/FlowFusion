@@ -13,11 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-// import {
-//   fetchBotSlackChannels,
-//   onConnections,
-//   onDragStart,
-// } from '@/lib/editor-utils'
+import {
+  onDragStart,
+} from '@/lib/editor-utils'
 import EditorCanvasIconHelper from './editor-canvas-card-icon-helper'
 import {
   Accordion,
@@ -25,9 +23,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import RenderConnectionAccordion from './render-connection-accordian'
+import { useFuzzieStore } from '@/store'
+import RenderOutputAccordion from './render-output-accordian'
 // import RenderConnectionAccordion from './render-connection-accordion'
 // import RenderOutputAccordion from './render-output-accordian'
-// import { useFuzzieStore } from '@/store'
 
 type Props = {
   nodes: EditorNodeType[]
@@ -36,7 +36,7 @@ type Props = {
 const EditorCanvasSidebar = ({ nodes }: Props) => {
   const { state } = useEditor()
   const { nodeConnection } = useNodeConnections()
-  // const { googleFile, setSlackChannels } = useFuzzieStore()
+  const { googleFile, setSlackChannels } = useFuzzieStore()
   // useEffect(() => {
   //   if (state) {
   //     onConnections(nodeConnection, state, googleFile)
@@ -79,9 +79,8 @@ const EditorCanvasSidebar = ({ nodes }: Props) => {
                 draggable
                 className="w-full cursor-grab border-black bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900"
                 onDragStart={(event) =>
-                  // onDragStart(event, cardKey as EditorCanvasTypes)
+                  onDragStart(event, cardKey as EditorCanvasTypes)
                   
-                  "hh"
                 }
               >
                 <CardHeader className="flex flex-row items-center gap-4 p-4">
@@ -112,12 +111,12 @@ const EditorCanvasSidebar = ({ nodes }: Props) => {
               </AccordionTrigger>
               <AccordionContent>
                 {CONNECTIONS.map((connection) => (
-                  // <RenderConnectionAccordion
-                  //   key={connection.title}
-                  //   state={state}
-                  //   connection={connection}
-                  // />
-                  ''
+                  <RenderConnectionAccordion
+                    key={connection.title}
+                    state={state}
+                    connection={connection}
+                  />
+                  
                 ))}
               </AccordionContent>
             </AccordionItem>
@@ -128,10 +127,10 @@ const EditorCanvasSidebar = ({ nodes }: Props) => {
               <AccordionTrigger className="!no-underline">
                 Action
               </AccordionTrigger>
-              {/* <RenderOutputAccordion
+              <RenderOutputAccordion
                 state={state}
                 nodeConnection={nodeConnection}
-              /> */}
+              />
             </AccordionItem>
           </Accordion>
         </TabsContent>

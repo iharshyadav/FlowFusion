@@ -56,6 +56,13 @@ export type EditorNodeType = {
   data: EditorCanvasCardType
 }
 
+export const nodeMapper: Record<string, string> = {
+  Notion: 'notionNode',
+  Slack: 'slackNode',
+  Discord: 'discordNode',
+  'Google Drive': 'googleNode',
+}
+
 export type EditorNode = EditorNodeType
 
 export type EditorActions =

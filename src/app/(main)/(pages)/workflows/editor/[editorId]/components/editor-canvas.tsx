@@ -27,8 +27,9 @@ import { usePathname } from 'next/navigation'
 import { v4 } from 'uuid'
 import { EditorCanvasDefaultCardTypes } from '@/lib/constants'
 import FlowInstance from './flow-instance'
-// import EditorCanvasSidebar from './editor-canvas-sidebar'
-// import { onGetNodesEdges } from '../../../actions/workflow-connections'
+import EditorCanvasSidebar from './editor-canvas-sidebar'
+import { onGetNodesEdges } from '../../../actions/workflow-connections'
+// import { onGetNodesEdges } from '../../../actions/workflow-connection'
 
 type Props = {}
 
@@ -43,8 +44,6 @@ const EditorCanvas = (props: Props) => {
   const [isWorkFlowLoading, setIsWorkFlowLoading] = useState<boolean>(false)
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance>()
-
-
   const pathname = usePathname()
 
   const onDragOver = useCallback((event: any) => {
@@ -94,6 +93,7 @@ const EditorCanvas = (props: Props) => {
         return
       }
 
+      
       if (!reactFlowInstance) return
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
@@ -113,6 +113,8 @@ const EditorCanvas = (props: Props) => {
           type: type,
         },
       }
+
+      console.log(newNode)
       //@ts-ignore
       setNodes((nds) => nds.concat(newNode))
     },
@@ -266,8 +268,7 @@ const EditorCanvas = (props: Props) => {
             edges={edges}
             nodes={nodes}
           >
-            {/* <EditorCanvasSidebar nodes={nodes} /> */}
-            s
+            <EditorCanvasSidebar nodes={nodes} />
           </FlowInstance>
         )}
       </ResizablePanel>
