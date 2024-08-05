@@ -9,6 +9,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { onFlowPublish } from '../editor/[editorId]/actions/workflow-connections'
+import { toast } from 'sonner'
 
 interface workflowsProps {
     name: string
@@ -18,6 +20,16 @@ interface workflowsProps {
 }
 
 const Workflows: FC<workflowsProps> = ({ description, id, name, publish }: workflowsProps) => {
+
+  const onPublishFlow = async (event: any) => {
+    const response = await onFlowPublish(
+      id,
+      event.target.ariaChecked === 'false'
+    )
+    // @ts-ignore
+    if (response) toast.message(response)
+  }
+
   return (
     <Card className="flex w-full items-center justify-between">
       <CardHeader className="flex flex-col gap-4">

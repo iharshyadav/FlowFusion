@@ -12,22 +12,19 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { onContentChange } from '@/lib/editor-utils'
-// import GoogleFileDetails from './google-file-details'
-// import GoogleDriveFiles from './google-drive-files'
 // import ActionButton from './action-button'
 // import { getFileMetaData } from '@/app/(main)/(pages)/connections/_actions/google-connection'
 import axios from 'axios'
 import { toast } from 'sonner'
 import GoogleFileDetails from './google-file-details'
 import GoogleDriveFiles from './google-drive-files'
+import ActionButton from './action-button'
 
 export interface Option {
   value: string
   label: string
   disable?: boolean
-  /** fixed option that can't be removed. */
   fixed?: boolean
-  /** Group the options by providing key. */
   [key: string]: string | boolean | undefined
 }
 interface GroupOption {
@@ -126,12 +123,12 @@ const ContentBasedOnTitle = ({
             </Card>
           )}
           {title === 'Google Drive' && <GoogleDriveFiles />}
-          {/* <ActionButton
+          <ActionButton
             currentService={title}
             nodeConnection={nodeConnection}
             channels={selectedSlackChannels}
             setChannels={setSelectedSlackChannels}
-          /> */}
+          />
         </div>
       </Card>
     </AccordionContent>

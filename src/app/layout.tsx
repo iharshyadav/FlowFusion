@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import ModelProvider from "@/providers/modal-provider";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = DM_Sans({ subsets: ["latin"] });
 
@@ -34,7 +34,7 @@ export default async function RootLayout({
           >
             <ModelProvider>
               {children}
-              <Toaster />
+              <Toaster position="top-center" />
               </ModelProvider>
           </ThemeProvider>
         </body>

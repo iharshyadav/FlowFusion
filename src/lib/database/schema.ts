@@ -8,17 +8,17 @@ const UserSchema = new Schema({
   profileImage: { type: String },
   tier: { type: String, default: "Free" },
   credits: { type: String, default: "10" },
-  // localGoogleId: { type: String, unique: true },
-  // googleResourceId: { type: String, unique: true },
+  localGoogleId: { type: String, unique: true },
+  googleResourceId: { type: String, unique: true },
   localGoogleCredential: {
     type: Schema.Types.ObjectId,
     ref: "LocalGoogleCredential",
   },
-  discordWebhooks: [{ type: Schema.Types.ObjectId, ref: "DiscordWebhook" }],
-  notions: [{ type: Schema.Types.ObjectId, ref: "Notion" }],
-  slacks: [{ type: Schema.Types.ObjectId, ref: "Slack" }],
-  connections: [{ type: Schema.Types.ObjectId, ref: "Connections" }],
-  workflows: [{ type: Schema.Types.ObjectId, ref: "Workflows" }],
+  discordWebhooks: [{ type: Schema.Types.String, ref: "DiscordWebhook" }],
+  notions: [{ type: Schema.Types.String, ref: "Notion" }],
+  slacks: [{ type: Schema.Types.String, ref: "Slack" }],
+  connections: [{ type: Schema.Types.String, ref: "Connections" }],
+  workflows: [{ type: Schema.Types.String, ref: "Workflows" }],
 });
 
 const LocalGoogleCredentialSchema = new Schema({
@@ -37,8 +37,8 @@ const DiscordWebhookSchema = new Schema({
   guildName: { type: String, required: true },
   guildId: { type: String, required: true },
   channelId: { type: String, unique: true, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  connections: [{ type: Schema.Types.ObjectId, ref: 'Connections' }]
+  userId: { type: Schema.Types.String, ref: 'User', required: true },
+  connections: [{ type: Schema.Types.String, ref: 'Connections' }]
 });
 
 const SlackSchema = new Schema({
@@ -49,8 +49,8 @@ const SlackSchema = new Schema({
   botUserId: { type: String, required: true },
   teamId: { type: String, required: true },
   teamName: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  connections: [{ type: Schema.Types.ObjectId, ref: 'Connections' }]
+  userId: { type: Schema.Types.String, ref: 'User', required: true },
+  connections: [{ type: Schema.Types.String, ref: 'Connections' }]
 });
 
 const NotionSchema = new Schema({
@@ -59,16 +59,16 @@ const NotionSchema = new Schema({
   databaseId: { type: String, unique: true, required: true },
   workspaceName: { type: String, required: true },
   workspaceIcon: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  connections: [{ type: Schema.Types.ObjectId, ref: 'Connections' }]
+  userId: { type: Schema.Types.String, ref: 'User', required: true },
+  connections: [{ type: Schema.Types.String, ref: 'Connections' }]
 });
 
 const ConnectionsSchema = new Schema({
   type: { type: String, unique: true, required: true },
-  discordWebhookId: { type: Schema.Types.ObjectId, ref: 'DiscordWebhook' },
-  notionId: { type: Schema.Types.ObjectId, ref: 'Notion' },
-  userId: { type: Schema.Types.ObjectId, ref: 'User' },
-  slackId: { type: Schema.Types.ObjectId, ref: 'Slack' }
+  discordWebhookId: { type: Schema.Types.String, ref: 'DiscordWebhook' },
+  notionId: { type: Schema.Types.String, ref: 'Notion' },
+  userId: { type: Schema.Types.String, ref: 'User' },
+  slackId: { type: Schema.Types.String, ref: 'Slack' }
 });
 
 const WorkflowsSchema = new Schema({
@@ -86,7 +86,7 @@ const WorkflowsSchema = new Schema({
   cronPath: { type: String },
   publish: { type: Boolean, default: false },
   description: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+  userId: { type: Schema.Types.String, ref: 'User', required: true }
 });
 
 export const User = mongoose.models.User || mongoose.model('User', UserSchema);

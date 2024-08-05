@@ -45,7 +45,7 @@ export const getGoogleListener = async () => {
   if (userId) {
     const listener = await Workflows.findOne(
       { clerkId: userId },
-      'googleResourceId' // Selects only the googleResourceId field
+      'googleResourceId' 
     );
 
     if (listener) return listener
