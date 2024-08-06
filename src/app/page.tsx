@@ -1,49 +1,48 @@
-import { HeroParallax } from "@/components/global/connect-parallax";
-import { ContainerScroll } from "@/components/global/container-scroll-animation";
-import { InfiniteMovingCards } from "@/components/global/infinite-moving-cards";
 import Navbar from "@/components/global/navbar";
-import { Button } from "@/components/ui/button";
-import { clients, products } from "@/lib/constants";
 import { CardBody, CardContainer, CardItem } from '@/components/global/3d-card'
 import { LampComponent } from "@/components/global/lamp";
 import { CheckIcon } from "lucide-react";
+import Meteors from "@/components/magicui/meteors";
+import { OrbitingCirclesDemo } from "@/components/magicui/orbit";
+import { Dock } from "@/components/magicui/dock";
+import { DockDemoFooter } from "@/components/magicui/dockFooter";
+import { Separator } from "@radix-ui/react-separator";
+import Link from "next/link";
+import ShimmerButton from "@/components/magicui/shimmer-button";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Home() {
+export default async function Home() {
+
+  const user = await currentUser()
+
   return (
     <>
-       <Navbar />
-       <section className="h-screen w-full  bg-neutral-950 rounded-md  !overflow-visible relative flex flex-col items-center  antialiased">
-        <div className="absolute inset-0  h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_35%,#223_100%)]"></div>
-        <div className="flex flex-col mt-[-100px] md:mt-[-50px]">
-          <ContainerScroll
-            titleComponent={
-              <div className="flex items-center flex-col">
-                <Button
-                  size={'lg'}
-                  className="p-8 mb-8 md:mb-0 text-2xl w-full sm:w-fit border-t-2 rounded-full border-[#4D4D4D] bg-[#1F1F1F] hover:bg-white group transition-all flex items-center justify-center gap-4 hover:shadow-xl hover:shadow-neutral-500 duration-500"
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600  md:text-center font-sans group-hover:bg-gradient-to-r group-hover:from-black goup-hover:to-black">
-                    Start For Free Today
-                  </span>
-                </Button>
-                <h1 className="text-5xl md:text-8xl  bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-600 font-sans font-bold">
-                  Automate Your Work With Fuzzie
-                </h1>
-              </div>
-            }
-          />
+      <Navbar />
+      <section className="h-screen w-full  bg-neutral-950 rounded-md  !overflow-visible relative flex flex-col items-center  antialiased">
+        {/* <div className="absolute inset-0 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_35%,#223_100%)]"> */}
+        <div className="relative flex h-screen w-full flex-col gap-1 items-center justify-center overflow-hidden rounded-lg bg-[#060606] md:shadow-xl">
+          <Meteors number={30} />
+          <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
+            FLOWFUSION
+          </span>
+          <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black pb-3 to-gray-300/80 bg-clip-text text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
+            &quot;Unify your messaging: Instantly sync Slack, Discord, and
+            Notion.&quot;
+          </span>
+          {!user && (
+            <Link href="/dashboard">
+              <ShimmerButton className="shadow-2xl">
+                <span className="whitespace-pre-wrap cursor-pointer text-center text-sm font-normal leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-2xl">
+                  {!user && "Get Started"}
+                </span>
+              </ShimmerButton>
+            </Link>
+          )}
         </div>
+        {/* </div> */}
       </section>
-      <InfiniteMovingCards
-        className="md:mt-[34rem] mt-[-100px]"
-        items={clients}
-        direction="right"
-        speed="slow"
-      />
-       <section>
-        <HeroParallax products={products}></HeroParallax>
-      </section>
-      <section className="mt-[-500px]">
+      <OrbitingCirclesDemo />
+      <section className="">
         <LampComponent />
         <div className="flex flex-wrap items-center justify-center flex-col md:flex-row gap-8 -mt-72">
           <CardContainer className="inter-var ">
@@ -188,6 +187,10 @@ export default function Home() {
             </CardBody>
           </CardContainer>
         </div>
+        <Separator className="h-[0.1vh] mt-16 w-full bg-[#ffffff0e]" />
+      </section>
+      <section className="h-72 flex items-center justify-center">
+        <DockDemoFooter />
       </section>
     </>
   );
