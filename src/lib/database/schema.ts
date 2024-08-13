@@ -19,7 +19,14 @@ const UserSchema = new Schema({
   slacks: [{ type: Schema.Types.String, ref: "Slack" }],
   connections: [{ type: Schema.Types.String, ref: "Connections" }],
   workflows: [{ type: Schema.Types.String, ref: "Workflows" }],
+  isAdmin: { type: Boolean, default: false }
 });
+
+  const otpSchema = new Schema({
+    userEmail : {type : String , required : true},
+    otp : {type : Number , required : true},
+    createdAt: { type: Date, default: Date.now, expires: 60 }
+})
 
 const LocalGoogleCredentialSchema = new Schema({
   accessToken: { type: String, unique: true, required: true },
@@ -96,3 +103,4 @@ export const Slack = mongoose.models.Slack || mongoose.model('Slack', SlackSchem
 export const Notion = mongoose.models.Notion || mongoose.model('Notion', NotionSchema);
 export const Connections = mongoose.models.Connections || mongoose.model('Connections', ConnectionsSchema);
 export const Workflows = mongoose.models.Workflows || mongoose.model('Workflows', WorkflowsSchema);
+export const Otp = mongoose.models.Otp || mongoose.model('Otp', otpSchema);

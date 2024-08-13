@@ -10,6 +10,7 @@ import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 import ShimmerButton from "@/components/magicui/shimmer-button";
 import { currentUser } from "@clerk/nextjs/server";
+import { BoxRevealDemo } from "@/components/global/BoxRevealDemo";
 
 export default async function Home() {
 
@@ -42,6 +43,9 @@ export default async function Home() {
         {/* </div> */}
       </section>
       <OrbitingCirclesDemo />
+      <section className="bg-[#060606]">
+      <BoxRevealDemo />
+      </section>
       <section className="">
         <LampComponent />
         <div className="flex flex-wrap items-center justify-center flex-col md:flex-row gap-8 -mt-72">

@@ -20,13 +20,13 @@ const MenuOptions = (props: Props) => {
   const pathName = usePathname()
 
   return (
-    <nav className=" dark:bg-black justify-between flex items-center flex-col py-6 px-2">
+    <nav className=" dark:bg-black justify-between flex items-center flex-col py-6 px-4">
       <div className="flex items-center justify-center flex-col gap-2">
         <Link
           className="flex font-bold flex-row "
           href="/"
         >
-          fuzzie.
+          flow
         </Link>
         <TooltipProvider>
           {menuOptions.map((menuItem) => (
@@ -61,7 +61,7 @@ const MenuOptions = (props: Props) => {
           ))}
         </TooltipProvider>
         <Separator />
-        <div className="flex items-center flex-col gap-4 dark:bg-[#353346]/30 py-4 px-2 rounded-full h-56 border-[1px]">
+        {/* <div className="flex items-center flex-col gap-4 dark:bg-[#353346]/30 py-4 px-2 rounded-full h-56 border-[1px]">
           <div className="relative dark:bg-[#353346]/70 p-2 rounded-full dark:border-t-[2px] border-[1px] dark:border-t-[#353346]">
             <LucideMousePointerClick
               className="dark:text-white"
@@ -89,7 +89,7 @@ const MenuOptions = (props: Props) => {
               size={18}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="flex items-center justify-center gap-8 flex-col">
         <ModeToggle />

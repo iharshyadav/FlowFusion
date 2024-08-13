@@ -23,8 +23,13 @@ const config = {
         meteor: "meteor 5s linear infinite",
         "spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
         slide: "slide var(--speed) ease-in-out infinite alternate",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
         "spin-around": {
           "0%": {
             transform: "translateZ(0) rotate(0)",
