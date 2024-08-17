@@ -3,6 +3,7 @@
 import { adminLogin } from '@/lib/admin'
 import { emailSend } from '@/lib/emails/nodemailer'
 import { sendVerificationEmail } from '@/lib/emails/sendEmail'
+import { useAuth } from '@clerk/nextjs'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { FC, useEffect, useState } from 'react'
@@ -15,6 +16,8 @@ interface AdminFormProps {
 const AdminForm: FC<AdminFormProps> = ({setloading}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const {userId} = useAuth();
 
   // useEffect(() => {
   //   const fetch = async () => {
@@ -35,11 +38,11 @@ const AdminForm: FC<AdminFormProps> = ({setloading}) => {
     const formData = new FormData();
     formData.append('email', email);
     
-    const userAuth = await adminLogin(formData);
+    const userAuth = await adminLogin(formData,userId!,randomOtp);
 
     if(userAuth){
       await emailSend(email,randomOtp)
-      toast("successful login");
+      toast("successfully email send");
       setloading(true)
     }else{
       toast("error login");

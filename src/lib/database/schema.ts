@@ -23,7 +23,7 @@ const UserSchema = new Schema({
 });
 
   const otpSchema = new Schema({
-    userEmail : {type : String , required : true},
+    clerkId : {type : String , required : true , unique : true},
     otp : {type : Number , required : true},
     createdAt: { type: Date, default: Date.now, expires: 60 }
 })

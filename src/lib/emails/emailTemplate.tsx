@@ -9,6 +9,7 @@ import {
     Text,
     Button,
   } from '@react-email/components';
+import Link from 'next/link';
   
   interface VerificationEmailProps {
     email: string;
@@ -38,8 +39,8 @@ import {
           </Row>
           <Row>
             <Text>
-              Thank you for registering. Please use the following verification
-              code to complete your registration:
+              Please use the following verification
+              code to complete your Verification:
             </Text>
           </Row>
           <Row>
@@ -47,7 +48,7 @@ import {
           </Row>
           <Row>
             <Text>
-              If you did not request this code, please ignore this email.
+              If you did not request this code, please <Link href={"http://localhost:3000/"}>Report</Link> this email.
             </Text>
           </Row>
           {/* <Row>

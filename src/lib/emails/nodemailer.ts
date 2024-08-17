@@ -58,17 +58,13 @@ export const emailSend = async (email: string, otp: number) => {
 <div class="heading">Hello ${email},</div>
 </div>
 <div class="row">
-<div class="text">
-Thank you for registering. Please use the following verification
-code to complete your registration:
-</div>
 </div>
 <div class="row">
 <div class="preview">Here's your verification code:<span class="highlight">${otp}</span> </div>
     </div>
     <div class="row">
       <div class="text">
-        If you did not request this code, please ignore this email.
+        if you did not request this code, please <a href="http://localhost:3000/">Report</a> this email.
       </div>
     </div>
   </div>

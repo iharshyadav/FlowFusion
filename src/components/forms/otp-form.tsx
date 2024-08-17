@@ -1,14 +1,35 @@
 "use client"
-
-import { useRouter } from 'next/navigation';
-import { FC, useEffect, useState, useTransition } from 'react'
+ 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+ 
+import { Button } from "@/components/ui/button"
 import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-  } from "@/components/ui/input-otp"  
-
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
+import { toast } from "@/components/ui/use-toast"
+import { useAuth } from "@clerk/nextjs"
+import { FC } from "react"
+import { checkAdmin } from "@/lib/admin"
+import { useRouter } from "next/navigation"
+ 
+const FormSchema = z.object({
+  pin: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+})
 
 interface otpFormProps {
   
@@ -18,40 +39,69 @@ const OtpForm: FC<otpFormProps> = ({}) => {
 
     const router = useRouter();
 
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [otp, setOtp] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState("");
-    const [resendCountdown, setResendCountdown] = useState(0);
-  
-    const [isPending, startTransition] = useTransition();
-  
-    useEffect(() => {
-      let timer: NodeJS.Timeout;
-      if (resendCountdown > 0) {
-        timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
-      }
-      return () => clearTimeout(timer);
-    }, [resendCountdown]);
+    const {userId} = useAuth()
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+      resolver: zodResolver(FormSchema),
+      defaultValues: {
+        pin: "",
+      },
+    })
+   
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const response = await checkAdmin(userId!, data.pin);
+    console.log(response);
+    // return response;
+    if(response.status === 200){
+      toast({
+        title: "logged in successfully",
+       
+      })
+      router.push("/admin")
+    }else{
+      router.push("/adinsignin")
+    }
+  }
+
+    // const handleSubmit = async () => {
+    //   const response = await checkAdmin(userId!,otp);
+    //   console.log(response);
+    //   return response;
+    // }
 
 
   return (
-    <div>
-      <h1 className='w-full mb-8 text-xl font-semibold'>Otp sent to email. verify to continue.</h1>
-      <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
-        <InputOTPGroup>
-          <InputOTPSlot index={0} />
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={2} />
-        </InputOTPGroup>
-        <InputOTPSeparator />
-        <InputOTPGroup>
-          <InputOTPSlot index={3} />
-          <InputOTPSlot index={4} />
-          <InputOTPSlot index={5} />
-        </InputOTPGroup>
-      </InputOTP>
-    </div>
+    <Form {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <FormField
+        control={form.control}
+        name="pin"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>One-Time Password</FormLabel>
+            <FormControl>
+              <InputOTP maxLength={6} {...field}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </FormControl>
+            <FormDescription>
+              Please enter the one-time password sent to your phone.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <Button type="submit">Submit</Button>
+    </form>
+  </Form>
   );
 }
 
