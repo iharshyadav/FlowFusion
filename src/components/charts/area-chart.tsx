@@ -134,7 +134,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function AreaChartComponent() {
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const [timeRange, setTimeRange] = React.useState("90d");
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -148,6 +148,14 @@ export function AreaChartComponent() {
     now.setDate(now.getDate() - daysToSubtract)
     return date >= now
   })
+
+  // function countvisits() {
+  //   fetch('https://api.countapi.xyz/update/laptop/mouse/?amount=1')
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setStoreCount(res.value);
+  //     });
+  // }
 
   return (
     <Card>

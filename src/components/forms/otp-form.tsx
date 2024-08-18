@@ -19,11 +19,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { useAuth } from "@clerk/nextjs"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { checkAdmin } from "@/lib/admin"
 import { useRouter } from "next/navigation"
+import { Audio } from "react-loader-spinner"
  
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -37,6 +38,8 @@ interface otpFormProps {
 
 const OtpForm: FC<otpFormProps> = ({}) => {
 
+  const [loader, setLoader] = useState<boolean>(false)
+
     const router = useRouter();
 
     const {userId} = useAuth()
@@ -49,59 +52,69 @@ const OtpForm: FC<otpFormProps> = ({}) => {
     })
    
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setLoader(true)
     const response = await checkAdmin(userId!, data.pin);
     console.log(response);
-    // return response;
     if(response.status === 200){
-      toast({
-        title: "logged in successfully",
-       
-      })
+      toast( response.message as string)
+      setLoader(false)
       router.push("/admin")
     }else{
+      toast( response.message as string)
+      setLoader(false)
       router.push("/adinsignin")
     }
   }
 
-    // const handleSubmit = async () => {
-    //   const response = await checkAdmin(userId!,otp);
-    //   console.log(response);
-    //   return response;
-    // }
-
 
   return (
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-      <FormField
-        control={form.control}
-        name="pin"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>One-Time Password</FormLabel>
-            <FormControl>
-              <InputOTP maxLength={6} {...field}>
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-            </FormControl>
-            <FormDescription>
-              Please enter the one-time password sent to your phone.
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <FormField
+          control={form.control}
+          name="pin"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>One-Time Password</FormLabel>
+              <FormControl>
+                <InputOTP maxLength={6} {...field}>
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </FormControl>
+              <FormDescription>
+                Please enter the one-time password sent to your phone.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button type="submit">Submit</Button>
-    </form>
-  </Form>
+        <Button type="submit" disabled={loader}>
+          {loader ? (
+            <Audio
+              height="30"
+              width="30"
+              radius="9"
+              color="black"
+              ariaLabel="loading"
+              // @ts-ignore
+              wrapperStyle
+              // @ts-ignore
+              wrapperClass
+            />
+          ) : (
+            "Submit"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }
 

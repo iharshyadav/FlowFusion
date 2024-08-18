@@ -1,24 +1,26 @@
-import { connectToDB } from '@/lib/database/db';
-import { User } from '@/lib/database/schema';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url!);
   const userId = searchParams.get('userId');
+
+  if(userId === null){
+    return NextResponse.json({ status: 400, error: 'missing userId' });
+  }
 
   if (typeof userId !== 'string') {
     return NextResponse.json({ status: 400, error: 'Invalid userId' });
   }
 
-  const authorizationHeader = req.headers['access-token'] as string;
-  if (!authorizationHeader || !authorizationHeader.startsWith('access ')) {
-    return NextResponse.json({ status: 401, error: 'Token is missing or invalid' });
-  }
-  const token = authorizationHeader?.[1];
+  const authorizationHeader = req.headers.get('authorization');
 
-  console.log(token,"dgedrg")
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    return NextResponse.json({ status: 401, error: 'Authorization header is missing or invalid' });
+  }
+
+  // Extract the token from the Authorization header
+  const token = authorizationHeader.split(' ')[1];
 
   if (!token) {
     return NextResponse.json({ status: 401, error: 'Token is missing' });
@@ -29,10 +31,8 @@ export async function POST(req: NextApiRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 
-    if(!decoded){
-      return NextResponse.json({
-        msg : "token doesn't matched"
-    })
+    if (!decoded || typeof decoded !== 'object' || decoded.clerkId !== userId) {
+      return NextResponse.json({ status: 401, error: "Token doesn't match userId" });
     }
 
     return NextResponse.json({
@@ -40,7 +40,7 @@ export async function POST(req: NextApiRequest) {
         isAdmin : true
     })
   } catch (error) {
-    console.error("Error checking admin status:", error);
-    return NextResponse.json({ isAdmin: false });
+    // console.error("Error checking admin status:", error);
+    return NextResponse.json({status : 201, isAdmin: false });
   }
 }

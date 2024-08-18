@@ -29,7 +29,6 @@ export const adminLogin = async (formData : FormData,userId : string,randomOtp :
       otp : randomOtp
     })
     
-    console.log("first")
     return true;
 }
 
@@ -38,11 +37,17 @@ export const checkAdmin = async ( userId : string, otp : string) => {
     const user = await Otp.findOne({clerkId : userId});
 
     if(!user){
-      throw new Error("Otp not send please try again")
+      return {
+        status : 201,
+        message : "Otp not send please try again",
+      };
     }
 
     if(user?.otp != otp){
-       throw new Error("Opt didn't match")
+       return {
+        status : 201,
+        message : "Opt didn't match",
+      };
     }
     
     // if(!user.isAdmin){
@@ -50,10 +55,10 @@ export const checkAdmin = async ( userId : string, otp : string) => {
     // }
 
     const cookieOption = {
-      maxAge: 15 * 24 * 60 * 60 * 1000,
+      maxAge: 1 * 60 * 60 * 1000,
       sameSite: true,
-      httpOnly: true,
-      secure: true,
+      httpOnly: false,
+      secure: true
     }
 
     const token = jwt.sign({clerkId : userId}, process.env.JWT_SECRET as string)
@@ -67,7 +72,7 @@ export const checkAdmin = async ( userId : string, otp : string) => {
 
     return {
       status : 200,
-      message : "success"
+      message : "success",
     };
 }
 

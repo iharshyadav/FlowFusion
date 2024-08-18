@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { FC, useEffect, useState } from 'react'
 import { toast } from "sonner"
+import { Audio } from 'react-loader-spinner'
 
 interface AdminFormProps {
   setloading : (loading: boolean) => void
@@ -16,16 +17,9 @@ interface AdminFormProps {
 const AdminForm: FC<AdminFormProps> = ({setloading}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loader, setLoader] = useState<boolean>(false)
 
   const {userId} = useAuth();
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     await axios.get("/metrices")
-  //     .then((res) => console.log(res));
-  //   }
-  //   fetch();
-  // },[])
 
   const randomOtp:number = Math.ceil(Math.random() * 1000000);
   console.log(randomOtp);
@@ -35,15 +29,24 @@ const AdminForm: FC<AdminFormProps> = ({setloading}) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
+    setLoader(true)
     const formData = new FormData();
     formData.append('email', email);
+
+    if(email === ""){
+      toast("please enter the email")
+      setLoader(false)
+      return;
+    }
     
     const userAuth = await adminLogin(formData,userId!,randomOtp);
 
     if(userAuth){
       await emailSend(email,randomOtp)
-      toast("successfully email send");
       setloading(true)
+      setLoader(false)
+      toast("successfully email send");
+      setEmail("")
     }else{
       toast("error login");
     }
@@ -86,12 +89,27 @@ const AdminForm: FC<AdminFormProps> = ({setloading}) => {
       </div> */}
         </div>
         <div className="flex items-center p-6 pt-0">
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-          >
-            Admin Login
-          </button>
+            <button
+            disabled={loader}
+              type="submit"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              >
+              {loader ? (
+                <Audio
+                  height="30"
+                  width="30"
+                  radius="9"
+                  color="black"
+                  ariaLabel="loading"
+                  // @ts-ignore
+                  wrapperStyle
+                  // @ts-ignore
+                  wrapperClass
+                />
+              ) : (
+              "Admin Login"
+            )}
+            </button>
         </div>
       </div>
     </form>
